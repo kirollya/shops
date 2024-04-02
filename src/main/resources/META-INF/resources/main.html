@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Sell Service</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/wingcss/0.1.8/wing.min.css"/>
+    <!-- Load AngularJS -->
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"> </script>
+    <script src="/frontUtils.js"></script>
+</head>
+<body ng-app="SellManagement">
+
+<div class="container" ng-controller="SellManagementController">
+    <h1>Sell Service</h1>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-1">Shop</div>
+            <div class="col-8">
+                <select class="form-select" aria-label="shop_box" id="shopBox">
+                    <option ng-repeat="shop in shops" key={{shop.id}}>{{ shop.name }}</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-1">Item</div>
+            <div class="col-8">
+                <select class="form-select" aria-label="item_box" id="itemBox">
+                    <option ng-repeat="item in items" key={{item.id}}>{{ item.name }}</option>
+                </select>
+            </div>
+        </div>
+        <button id="getSellBtn">Show</button>
+    </div>
+</div>
+<script src="/frontEnd.js"></script>
+<div class="container" ng-controller="SellTableController">
+    <div class="container">
+        <table class="sellTable data">
+            <h1>SELL</h1>
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>shop</th>
+                    <th>item</th>
+                    <th>cost</th>
+                    <th>count</th>
+                </tr>
+            </thead>
+            <tbody class="sellTableBody">
+                <tr class="for_remove" ng-model="sell" key={{sell}}>
+                    <td class="not-editable-data">{{ sell.id }}</td>
+                    <td class="data shop_col">{{ sell.shop.name }}</td>
+                    <td class="data item_col">{{ sell.item.name }}</td>
+                    <td class="data">{{ sell.count }}</td>
+                    <td class="data">{{ sell.cost }}</td>
+                    <td class="buttons-td">
+                        <button class="save"> Save </button>
+                        <button class="add"> Add </button>
+                        <button class="edit"> Edit </button>
+                        <button class="delete"> Delete </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <script src="/table.js"></script>
+    </div>
+</div>
+</body>
+</html>
