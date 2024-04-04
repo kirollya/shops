@@ -54,8 +54,14 @@ public class MainFacade {
         return shopService.getShopRepository().findById(id);
     }
 
-    public Shop getShopByName(String name) {
+    /*public Shop getShopByName(String name) {
         return shopService.getShopRepository().findByName(name);
+    }*/
+
+    public Shop getShopByName(String name) {
+        Query query = entityManager.createQuery("FROM Shop WHERE name = :name");
+        query.setParameter("name", name);
+        return (Shop) query.getSingleResult();
     }
 
     public List<Shop> getAllShops() {

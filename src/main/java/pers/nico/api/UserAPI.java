@@ -28,8 +28,7 @@ public class UserAPI {
         Item item = mainFacade.getItemByName(name);
         if (item != null)
             return Response.ok(item).build();
-        else
-            return Response.serverError().build();
+        return Response.serverError().build();
     }
 
     @GET
@@ -59,8 +58,7 @@ public class UserAPI {
         Shop shop = mainFacade.getShopByName(name);
         if (shop != null)
             return Response.ok(shop).build();
-        else
-            return Response.serverError().build();
+        return Response.serverError().build();
     }
 
     @GET
@@ -75,8 +73,7 @@ public class UserAPI {
     public Response editShopName(@QueryParam("id") Long id, @QueryParam("name") String name) {
         if (mainFacade.editShopName(id, name))
             return Response.ok().build();
-        else
-            return Response.notModified().build();
+        return Response.notModified().build();
     }
 
     @POST
@@ -103,8 +100,7 @@ public class UserAPI {
     public Response deleteSellById(@PathParam("id") Long id) {
         if (mainFacade.deleteSellById(id))
             return Response.ok().build();
-        else
-            return  Response.notModified().build();
+        return  Response.notModified().build();
     }
 
 }
