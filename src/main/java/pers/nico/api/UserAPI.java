@@ -1,5 +1,7 @@
 package pers.nico.api;
 
+import jakarta.annotation.security.DenyAll;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -10,6 +12,7 @@ import pers.nico.models.entities.Sell;
 import pers.nico.models.entities.Shop;
 
 @Path("")
+@RolesAllowed("user")
 public class UserAPI {
 
     @Inject
