@@ -15,7 +15,11 @@ import pers.nico.services.ItemService;
 import pers.nico.services.SellService;
 import pers.nico.services.ShopService;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class MainFacade {
@@ -74,6 +78,20 @@ public class MainFacade {
         query.setParameter("shopName", name);
         query.setParameter("shopId", id);
         return query.executeUpdate() == 0;
+    }
+
+    public List<Map<String, Object>> getTotalCost(String shopName) {
+        List<Sell> sells = sellService.getSellRepository().listAll();
+        Map<String, Integer> map = sells.stream().collect(Collectors.groupingBy(Sell::getShopName, Collectors.summingInt(Sell::getTotalCost)));
+        List<Map<String, Object>> result = new ArrayList<>();
+        for (Map.Entry<String, Integer> shop: map.entrySet()) {
+            Map<String, Object> newElem = new HashMap<>();
+            newElem.put("name", shop.getKey());
+            newElem.put("totalCost", shop.getValue());
+            if (shopName == null || shop.getKey().toLowerCase().startsWith(shopName.toLowerCase()))
+                result.add(newElem);
+        }
+        return result;
     }
 
     public String addSell(Sell sell) {

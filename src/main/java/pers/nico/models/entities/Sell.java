@@ -22,6 +22,23 @@ public class Sell {
 
     private Integer cost;
 
+    public Sell() {
+
+    }
+
+    public Sell(Long id, Item item, Shop shop, Integer count, Integer cost) {
+        this.id = id;
+        this.item = item;
+        this.shop = shop;
+        this.count = count;
+        this.cost = cost;
+    }
+
+    public Sell(Shop shop, Integer totalCost) {
+        this.shop = shop;
+        this.cost = totalCost;
+    }
+
     public Long getId() {
         return id;
     }
@@ -40,6 +57,10 @@ public class Sell {
 
     public Shop getShop() {
         return shop;
+    }
+
+    public String getShopName() {
+        return shop.getName();
     }
 
     public void setShop(Shop shop) {
@@ -61,4 +82,9 @@ public class Sell {
     public void setCost(Integer cost) {
         this.cost = cost;
     }
+
+    public Integer getTotalCost() {
+        return this.cost * this.count;
+    }
+
 }

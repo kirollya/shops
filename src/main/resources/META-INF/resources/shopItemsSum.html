@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Sell Service</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/wingcss/0.1.8/wing.min.css"/>
+    <!-- Load AngularJS -->
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"> </script>
+    <script src="/frontUtils.js"></script>
+</head>
+<body ng-app="SellManagement">
+
+<div class="container" ng-controller="TotalCostController">
+    <div class="container">
+        <table class="totalShopCostTable data">
+            <h3>Total shop cost</h3>
+            <h4>Наименование магазина</h4>
+            <input class = "shopNameInput"/>
+            <button id="setNameBtn">Найти</button>
+            <script src="/totalCostFunc.js"></script>
+            <h4>Таблица</h4>
+            <thead>
+            <tr>
+                <th>shop</th>
+                <th>total cost</th>
+            </tr>
+            </thead>
+            <tbody class="sumTableBody">
+            <tr class="table_row" ng-repeat="shop in totalCostShops">
+                <td>{{ shop.name }}</td>
+                <td>{{ shop.totalCost }}</td>
+            </tr>
+            </tbody>
+        </table>
+        <script src="/table.js"></script>
+    </div>
+</div>
+
+</body>
+</html>

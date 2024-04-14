@@ -76,6 +76,13 @@ public class UserAPI {
         return Response.notModified().build();
     }
 
+    @GET
+    @Path("/getTotalCosts")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getTotalCosts(@QueryParam("shopName") String shopName) {
+        return Response.ok(mainFacade.getTotalCost(shopName)).build();
+    }
+
     @POST
     @Path("/addSell")
     public Response addSell(Sell sell) {

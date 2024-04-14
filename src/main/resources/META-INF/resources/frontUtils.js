@@ -26,10 +26,4 @@ app.controller("SellManagementController", function ($scope, $http) {
       console.log(response.statusText);
     });
   }
-  function _success(response) {
-    _refreshPageData();
-  }
-  function _error(response) {
-    alert(response.data.message || response.statusText);
-  }
 });
