@@ -1,6 +1,7 @@
 package pers.nico.api;
 
 import jakarta.annotation.security.DenyAll;
+import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -10,9 +11,11 @@ import pers.nico.MainFacade;
 import pers.nico.models.entities.Item;
 import pers.nico.models.entities.Sell;
 import pers.nico.models.entities.Shop;
+import pers.nico.reports.ReportBuilder;
 
 @Path("")
-@RolesAllowed("user")
+//@RolesAllowed("user")
+@PermitAll
 public class UserAPI {
 
     @Inject
@@ -111,6 +114,12 @@ public class UserAPI {
         if (mainFacade.deleteSellById(id))
             return Response.ok().build();
         return  Response.notModified().build();
+    }
+
+    @POST
+    @Path("/report/create/{id}")
+    public Response createReport(@PathParam("id") Long id) {
+        return Response.ok(new ReportBuilder(mainFacade.getAllSell(), mainFacade.getAllShops(), mainFacade.getAllItems()).build(id)).build();
     }
 
 }

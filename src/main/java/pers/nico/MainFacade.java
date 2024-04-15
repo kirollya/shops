@@ -5,8 +5,6 @@ import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.QueryParam;
-import jakarta.ws.rs.core.Response;
 import pers.nico.models.entities.Item;
 import pers.nico.models.entities.Sell;
 import pers.nico.models.entities.Shop;
@@ -57,10 +55,6 @@ public class MainFacade {
     public Shop getShop(Long id) {
         return shopService.getShopRepository().findById(id);
     }
-
-    /*public Shop getShopByName(String name) {
-        return shopService.getShopRepository().findByName(name);
-    }*/
 
     public Shop getShopByName(String name) {
         Query query = entityManager.createQuery("FROM Shop WHERE name = :name");
@@ -117,6 +111,10 @@ public class MainFacade {
     @Transactional
     public Boolean deleteSellById(Long id) {
         return sellService.getSellRepository().deleteById(id);
+    }
+
+    public List<Sell> getAllSell() {
+        return sellService.getSellRepository().listAll();
     }
 
 }

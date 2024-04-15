@@ -1,6 +1,8 @@
 var SellManagement = angular.module("SellManagement");
 
 var btn = document.getElementById("setNameBtn");
+var firstRepBtn = document.getElementById("createFirstReportBtn");
+var secondRepBtn = document.getElementById("createSecondReportBtn");
 
 SellManagement.controller("TotalCostController", function ($scope, $http) {
   //Initialize page with default data which is blank in this example
@@ -37,6 +39,22 @@ SellManagement.controller("TotalCostController", function ($scope, $http) {
     _refreshTotalCostPageData();
   }
 
+  function createFirstReport() {
+      $http({
+        method: 'POST',
+        url: "/report/create/1"
+      });
+  }
+
+  function createSecondReport() {
+      $http({
+        method: 'POST',
+        url: "/report/create/2"
+      });
+  }
+
   btn.onclick = setShopName;
+  firstRepBtn.onclick = createFirstReport;
+  secondRepBtn.onclick = createSecondReport;
 
 });
