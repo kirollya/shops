@@ -1,5 +1,6 @@
 package pers.nico.api;
 
+import jakarta.annotation.Resource;
 import jakarta.annotation.security.DenyAll;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
@@ -114,6 +115,21 @@ public class UserAPI {
         if (mainFacade.deleteSellById(id))
             return Response.ok().build();
         return  Response.notModified().build();
+    }
+
+    @POST
+    @Path("/shop/updCost")
+    public Response shopUpdCost(@QueryParam("updVal") Integer updVal, @QueryParam("shopId") Long shopId) {
+        if (mainFacade.shopUpdCost(updVal, shopId))
+            return Response.ok().build();
+        else
+            return Response.status(500).build();
+    }
+
+    @GET
+    @Path("/sell/getAll")
+    public Response getAllSell() {
+        return Response.ok(mainFacade.getAllSell()).build();
     }
 
     @POST

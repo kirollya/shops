@@ -20,13 +20,13 @@ public class Sell {
 
     private Integer count;
 
-    private Integer cost;
+    private Double cost;
 
     public Sell() {
 
     }
 
-    public Sell(Long id, Item item, Shop shop, Integer count, Integer cost) {
+    public Sell(Long id, Item item, Shop shop, Integer count, Double cost) {
         this.id = id;
         this.item = item;
         this.shop = shop;
@@ -34,7 +34,7 @@ public class Sell {
         this.cost = cost;
     }
 
-    public Sell(Shop shop, Integer totalCost) {
+    public Sell(Shop shop, Double totalCost) {
         this.shop = shop;
         this.cost = totalCost;
     }
@@ -75,15 +75,15 @@ public class Sell {
         this.count = count;
     }
 
-    public Integer getCost() {
+    public Double getCost() {
         return cost;
     }
 
-    public void setCost(Integer cost) {
+    public void setCost(Double cost) {
         this.cost = cost;
     }
 
-    public Integer getTotalCost() {
+    public Double getTotalCost() {
         return this.cost * this.count;
     }
 

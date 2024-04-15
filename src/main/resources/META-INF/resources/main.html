@@ -1,5 +1,21 @@
 <!doctype html>
 <html>
+<style>
+    td.btnTd {
+        min-width: 2175px;
+    }
+    td.data {
+        border: 1px solid black;
+        text-align: center;
+        min-width: 125px;
+    }
+    td.not-editable-data {
+        border: 1px solid black;
+        text-align: center;
+        min-width: 75px;
+    }
+
+</style>
 <head>
     <meta charset="utf-8"/>
     <title>Sell Service</title>
@@ -53,9 +69,9 @@
                     <td class="not-editable-data">{{ sell.id }}</td>
                     <td class="data shop_col">{{ sell.shop.name }}</td>
                     <td class="data item_col">{{ sell.item.name }}</td>
-                    <td class="data">{{ sell.count }}</td>
                     <td class="data">{{ sell.cost }}</td>
-                    <td class="buttons-td">
+                    <td class="data">{{ sell.count }}</td>
+                    <td class="buttons-td btnTd">
                         <button class="save"> Save </button>
                         <button class="add"> Add </button>
                         <button class="edit"> Edit </button>

@@ -76,9 +76,9 @@ public class MainFacade {
 
     public List<Map<String, Object>> getTotalCost(String shopName) {
         List<Sell> sells = sellService.getSellRepository().listAll();
-        Map<String, Integer> map = sells.stream().collect(Collectors.groupingBy(Sell::getShopName, Collectors.summingInt(Sell::getTotalCost)));
+        Map<String, Double> map = sells.stream().collect(Collectors.groupingBy(Sell::getShopName, Collectors.summingDouble(Sell::getTotalCost)));
         List<Map<String, Object>> result = new ArrayList<>();
-        for (Map.Entry<String, Integer> shop: map.entrySet()) {
+        for (Map.Entry<String, Double> shop: map.entrySet()) {
             Map<String, Object> newElem = new HashMap<>();
             newElem.put("name", shop.getKey());
             newElem.put("totalCost", shop.getValue());
@@ -111,6 +111,23 @@ public class MainFacade {
     @Transactional
     public Boolean deleteSellById(Long id) {
         return sellService.getSellRepository().deleteById(id);
+    }
+
+    @Transactional
+    public Boolean shopUpdCost(Integer updVal, Long shopId) {
+        if (updVal.equals(0))
+            return true;
+        Shop shop = shopService.getShopRepository().findById(shopId);
+        double val = 1 + (double)updVal / 100;
+        Query query = entityManager.createQuery("UPDATE Sell set cost = cost * :val WHERE shop = :shop");
+        query.setParameter("val", val);
+        query.setParameter("shop", shop);
+        try {
+            int result = query.executeUpdate();
+        } catch(Exception e) {
+            return false;
+        }
+        return true;
     }
 
     public List<Sell> getAllSell() {

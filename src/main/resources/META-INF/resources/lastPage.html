@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+<style>
+    td.data {
+        text-align: center;
+        border: 1px solid black;
+        min-width: 175px;
+    }
+    input.valInput {
+        min-height: 39px;
+        text-align: center;
+        font-size: 18pt;
+    }
+</style>
+<head>
+    <meta charset="utf-8"/>
+    <title>Sell Service</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/wingcss/0.1.8/wing.min.css"/>
+    <!-- Load AngularJS -->
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"> </script>
+    <script src="/frontUtils.js"></script>
+</head>
+<body ng-app="SellManagement">
+
+<div class="container" ng-controller="LastPageController">
+    <div class="container">
+        <table class="sellTable data">
+            <h1>SELL</h1>
+            <thead>
+            <tr>
+                <th>Название магазина</th>
+                <th>Название товара</th>
+                <th>Цена</th>
+                <th>Количество</th>
+            </tr>
+            </thead>
+            <tbody class="sellTableBody">
+            <tr class="for_remove" ng-repeat="s in sell">
+                <td class="data shop_col">{{ s.shop.name }}</td>
+                <td class="data item_col">{{ s.item.name }}</td>
+                <td class="data">{{ s.cost }}</td>
+                <td class="data">{{ s.count }}</td>
+            </tr>
+            </tbody>
+        </table>
+        <table>
+            <tr>
+                <td >
+                    <select class="form-select" aria-label="shop_box" id="shopBox" ng-controller="SellManagementController">
+                        <option ng-repeat="shop in shops" key={{shop.id}}>{{ shop.name }}</option>
+                    </select>
+                </td>
+                <td>
+                    <input class="valInput" id="updCostVal">
+                </td>
+                <td>
+                    <button class="updCostBtn" id="updCostBtn">Изменить цену</button>
+                </td>
+            <tr>
+        </table>
+        <script src="/lastScript.js"></script>
+    </div>
+</div>
+</body>
+</html>

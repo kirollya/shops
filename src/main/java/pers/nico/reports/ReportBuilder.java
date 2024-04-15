@@ -49,30 +49,28 @@ public class ReportBuilder {
         }
         fis.close();
         for (Shop shop: shopList) {
-            input.append("<div>-------------------------------------------</div><table>\n");
             input.append("<tr>\n");
-            input.append("<th align=\"left\">Магазин:</th>\n<th align=\"left\">" + shop.getName() + "</th>\n");
+            input.append("<th>Магазин:</th>\n<th colspan=\"2\">" + shop.getName() + "</th>\n");
             input.append("</tr>\n");
             input.append("<tr>\n");
-            input.append("<th align=\"left\">" + shop.getAddress() + "</th>\n<th align=\"left\">" + shop.getPhone() + "</th>\n");
+            input.append("<th>" + shop.getAddress() + "</th>\n<th colspan=\"2\">" + shop.getPhone() + "</th>\n");
             input.append("</tr>\n");
             Integer sum = 0;
             for (Sell sell: sellList) {
                 if (sell.getShop().equals(shop)) {
                     input.append("<tr>\n");
-                    input.append("<th align=\"left\">" + sell.getItem().getName() + "</th>\n");
-                    input.append("<th align=\"left\">" + sell.getCount() + "</th>\n");
-                    input.append("<th align=\"left\">" + sell.getCost() + "</th>\n");
+                    input.append("<th>" + sell.getItem().getName() + "</th>\n");
+                    input.append("<th>" + sell.getCount() + "</th>\n");
+                    input.append("<th>" + sell.getCost() + "</th>\n");
                     input.append("</tr>\n");
                     sum += sell.getCount();
                 }
             }
             input.append("<tr>\n");
-            input.append("<th align=\"left\">Итого: </th>\n<th align=\"left\">" + sum + "</th>\n");
+            input.append("<th>Итого: </th>\n<th colspan=\"2\">" + sum + "</th>\n");
             input.append("</tr>\n");
             input.append("</table>\n");
         }
-        input.append("<div>-------------------------------------------</div><table>\n");
         FileOutputStream fos = new FileOutputStream(".\\src\\main\\resources\\reports\\lineReport.html");
         fos.write(input.toString().getBytes(StandardCharsets.UTF_8));
         fos.close();
@@ -89,9 +87,9 @@ public class ReportBuilder {
         fis.close();
         input.append("<table>");
         input.append("<tr>\n");
-        input.append("<th align=\"left\"></th>\n");
+        input.append("<th></th>\n");
         for (Item item: itemList) {
-            input.append("<th align=\"left\">" + item.getName() + "</th>\n");
+            input.append("<th>" + item.getName() + "</th>\n");
         }
         input.append("</tr>\n");
         Integer[] itemCount = new Integer[itemList.size()];
@@ -99,10 +97,10 @@ public class ReportBuilder {
             itemCount[i] = 0;
         for (Shop shop: shopList) {
             input.append("<tr>\n");
-            input.append("<th align=\"left\">" + shop.getName() + "</th>\n");
+            input.append("<th>" + shop.getName() + "</th>\n");
             for (int i = 0; i < itemList.size(); i++) {
                 Item item = itemList.get(i);
-                input.append("<th align=\"left\">");
+                input.append("<th>");
                 int count = 0;
                 for (Sell sell: sellList) {
                     if (sell.getShop().equals(shop) && sell.getItem().equals(item)) {
@@ -115,9 +113,9 @@ public class ReportBuilder {
             input.append("</tr>\n");
         }
         input.append("<tr>\n");
-        input.append("<th align=\"left\">Итого:</th>\n");
+        input.append("<th>Итого:</th>\n");
         for (int i = 0; i < itemCount.length; i++)
-            input.append("<th align=\"left\">" + itemCount[i] + "</th>\n");
+            input.append("<th>" + itemCount[i] + "</th>\n");
         input.append("</tr>\n");
         input.append("</table>\n");
         FileOutputStream fos = new FileOutputStream(".\\src\\main\\resources\\reports\\tableReport.html");
