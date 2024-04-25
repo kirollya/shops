@@ -9,7 +9,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ReportBuilder {
 
@@ -18,8 +20,18 @@ public class ReportBuilder {
     private List<Item> itemList;
 
     public ReportBuilder(List<Sell> sellList, List<Shop> shopList, List<Item> itemList) {
-        this.sellList = sellList;
-        this.shopList = shopList;
+        this.sellList = sellList.stream().sorted(new Comparator<Sell>() {
+            @Override
+            public int compare(Sell o1, Sell o2) {
+                return o1.getCount() - o2.getCount();
+            }
+        }).collect(Collectors.toList());
+        this.shopList = shopList.stream().sorted(new Comparator<Shop>() {
+            @Override
+            public int compare(Shop o1, Shop o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        }).collect(Collectors.toList());
         this.itemList = itemList;
     }
 
@@ -48,7 +60,9 @@ public class ReportBuilder {
             ch = (byte)fis.read();
         }
         fis.close();
+
         for (Shop shop: shopList) {
+            input.append("<table>\n");
             input.append("<tr>\n");
             input.append("<th>Магазин:</th>\n<th colspan=\"2\">" + shop.getName() + "</th>\n");
             input.append("</tr>\n");
@@ -71,6 +85,8 @@ public class ReportBuilder {
             input.append("</tr>\n");
             input.append("</table>\n");
         }
+
+        input.append("</body>\n</html>");
         FileOutputStream fos = new FileOutputStream(".\\src\\main\\resources\\reports\\lineReport.html");
         fos.write(input.toString().getBytes(StandardCharsets.UTF_8));
         fos.close();
@@ -117,7 +133,8 @@ public class ReportBuilder {
         for (int i = 0; i < itemCount.length; i++)
             input.append("<th>" + itemCount[i] + "</th>\n");
         input.append("</tr>\n");
-        input.append("</table>\n");
+        input.append("</table>\n</body>\n" +
+                "</html>");
         FileOutputStream fos = new FileOutputStream(".\\src\\main\\resources\\reports\\tableReport.html");
         fos.write(input.toString().getBytes(StandardCharsets.UTF_8));
         fos.close();

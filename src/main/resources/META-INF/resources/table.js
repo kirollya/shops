@@ -22,16 +22,16 @@ $(document).on('click', '.save', function() {
     SellManagement.addSell(
         content[0],
         content[1],
-        content[3],
-        content[2]
+        content[2],
+        content[3]
     );
   } else {
     SellManagement.updateSell(
         $(this).parents('tr')[0].attributes["key"].nodeValue,
         content[0],
         content[1],
-        content[3],
-        content[2]
+        content[2],
+        content[3]
     );
   }
   $(this).siblings('.edit').show();
