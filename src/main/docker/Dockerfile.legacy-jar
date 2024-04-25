@@ -77,7 +77,16 @@
 #   accessed directly. (example: "foo.example.com,bar.example.com")
 #
 ###
-FROM registry.access.redhat.com/ubi8/openjdk-17:1.18
+#FROM registry.access.redhat.com/ubi8/openjdk-17:1.18
+FROM ubuntu:20.04
+
+RUN apt-get update && \
+    apt-get install -y openjdk-17-jdk && \
+    apt-get install -y openjdk-17-jre && \
+    apt-get clean
+
+ENV JAVA_HOME /usr/lib/jvm/java-17-openjdk-amd64/
+RUN export JAVA_HOME
 
 ENV LANGUAGE='en_US:en'
 
@@ -90,4 +99,5 @@ USER 185
 ENV JAVA_OPTS_APPEND="-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager"
 ENV JAVA_APP_JAR="/deployments/quarkus-run.jar"
 
-ENTRYPOINT [ "/opt/jboss/container/java/run/run-java.sh" ]
+#ENTRYPOINT [ "/opt/jboss/container/java/run/run-java.sh" ]
+CMD java -jar /deployments/quarkus-run.jar
