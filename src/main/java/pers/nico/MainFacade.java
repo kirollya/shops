@@ -1,14 +1,18 @@
 package pers.nico;
 
+import io.smallrye.reactive.messaging.annotations.Blocking;
+import io.vertx.core.json.JsonObject;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
+import org.eclipse.microprofile.reactive.messaging.Incoming;
 import pers.nico.models.entities.Item;
 import pers.nico.models.entities.Sell;
 import pers.nico.models.entities.Shop;
 
+import pers.nico.rabbit.RabbitSpamer;
 import pers.nico.services.ItemService;
 import pers.nico.services.SellService;
 import pers.nico.services.ShopService;
@@ -26,6 +30,9 @@ public class MainFacade {
     EntityManager entityManager;
 
     @Inject
+    RabbitSpamer rabbitSpamer;
+
+    @Inject
     ShopService shopService;
 
     @Inject
@@ -37,6 +44,21 @@ public class MainFacade {
     public String addItem(Item item) {
         itemService.addItem(item);
         return "Item was added!";
+    }
+
+    @Blocking
+    @Incoming("quarkus-consumer")
+    public void addItem(JsonObject jsonItem) {
+        Item item = jsonItem.mapTo(Item.class);
+        itemService.addItem(item);
+    }
+
+    public String spamItem(Item item) {
+        int count = 50;
+        for (int i = 0; i < count; i++) {
+            rabbitSpamer.send(item);
+        }
+        return "Fine";
     }
 
     public Item getItemByName(String name) {

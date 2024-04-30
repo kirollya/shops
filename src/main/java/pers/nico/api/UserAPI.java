@@ -1,9 +1,6 @@
 package pers.nico.api;
 
-import jakarta.annotation.Resource;
-import jakarta.annotation.security.DenyAll;
 import jakarta.annotation.security.PermitAll;
-import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -14,7 +11,7 @@ import pers.nico.models.entities.Sell;
 import pers.nico.models.entities.Shop;
 import pers.nico.reports.ReportBuilder;
 
-@Path("")
+@Path("/platform")
 //@RolesAllowed("user")
 @PermitAll
 public class UserAPI {
@@ -26,6 +23,12 @@ public class UserAPI {
     @Path("/addItem")
     public Response addItem(Item item) {
         return Response.ok(mainFacade.addItem(item)).build();
+    }
+
+    @POST
+    @Path("/addMoreItems")
+    public Response addMoreItems(Item item) {
+        return Response.ok(mainFacade.spamItem(item)).build();
     }
 
     @GET
