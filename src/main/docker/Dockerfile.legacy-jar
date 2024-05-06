@@ -7,7 +7,7 @@
 #
 # Then, build the image with:
 #
-# docker build -f src/main/docker/Dockerfile.legacy-jar -t quarkus/shops-legacy-jar .
+# docker build -f src/main/docker/Dockerfile.legacy-jar -t shops .
 #
 # Then run the container using:
 #
@@ -77,7 +77,6 @@
 #   accessed directly. (example: "foo.example.com,bar.example.com")
 #
 ###
-#FROM registry.access.redhat.com/ubi8/openjdk-17:1.18
 FROM ubuntu:20.04
 
 RUN apt-get update && \
@@ -99,5 +98,4 @@ USER 185
 ENV JAVA_OPTS_APPEND="-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager"
 ENV JAVA_APP_JAR="/deployments/quarkus-run.jar"
 
-#ENTRYPOINT [ "/opt/jboss/container/java/run/run-java.sh" ]
 CMD java -jar /deployments/quarkus-run.jar

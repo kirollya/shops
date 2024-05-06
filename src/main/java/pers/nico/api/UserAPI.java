@@ -26,9 +26,9 @@ public class UserAPI {
     }
 
     @POST
-    @Path("/addMoreItems")
-    public Response addMoreItems(Item item) {
-        return Response.ok(mainFacade.spamItem(item)).build();
+    @Path("/addMoreItems/{count}")
+    public Response addMoreItems(@PathParam("count") Integer count) {
+        return Response.ok(mainFacade.spamItem(count)).build();
     }
 
     @GET

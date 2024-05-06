@@ -53,8 +53,10 @@ public class MainFacade {
         itemService.addItem(item);
     }
 
-    public String spamItem(Item item) {
-        int count = 50;
+    public String spamItem(Integer count) {
+        Item item = new Item();
+        item.setName("Spam item");
+        item.setDescription("Item for spam");
         for (int i = 0; i < count; i++) {
             rabbitSpamer.send(item);
         }
