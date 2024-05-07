@@ -11,7 +11,7 @@ import pers.nico.models.entities.Sell;
 import pers.nico.models.entities.Shop;
 import pers.nico.reports.ReportBuilder;
 
-@Path("/platform")
+@Path("")
 //@RolesAllowed("user")
 @PermitAll
 public class UserAPI {

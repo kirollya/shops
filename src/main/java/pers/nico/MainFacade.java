@@ -8,6 +8,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
+import pers.nico.metrics.ObjectCounterMetric;
 import pers.nico.models.entities.Item;
 import pers.nico.models.entities.Sell;
 import pers.nico.models.entities.Shop;
@@ -33,6 +34,9 @@ public class MainFacade {
     RabbitSpamer rabbitSpamer;
 
     @Inject
+    ObjectCounterMetric objectCounterMetric;
+
+    @Inject
     ShopService shopService;
 
     @Inject
@@ -43,6 +47,7 @@ public class MainFacade {
 
     public String addItem(Item item) {
         itemService.addItem(item);
+        objectCounterMetric.putObj();
         return "Item was added!";
     }
 
@@ -60,6 +65,7 @@ public class MainFacade {
         for (int i = 0; i < count; i++) {
             rabbitSpamer.send(item);
         }
+        objectCounterMetric.putObj(count);
         return "Fine";
     }
 
@@ -73,6 +79,7 @@ public class MainFacade {
 
     public String addShop(Shop shop) {
         shopService.addShop(shop);
+        objectCounterMetric.putObj();
         return "Shop was added!";
     }
 
@@ -114,6 +121,7 @@ public class MainFacade {
 
     public String addSell(Sell sell) {
         sellService.addSell(sell);
+        objectCounterMetric.putObj();
         return "Sell was added!";
     }
 
