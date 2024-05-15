@@ -8,6 +8,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
+import org.jboss.logging.Logger;
 import pers.nico.metrics.ObjectCounterMetric;
 import pers.nico.models.entities.Item;
 import pers.nico.models.entities.Sell;
@@ -45,7 +46,10 @@ public class MainFacade {
     @Inject
     SellService sellService;
 
+    private static final Logger LOG = Logger.getLogger(MainFacade.class);
+
     public String addItem(Item item) {
+        LOG.info("New item: " + item.toString());
         itemService.addItem(item);
         objectCounterMetric.putObj();
         return "Item was added!";
@@ -55,10 +59,12 @@ public class MainFacade {
     @Incoming("quarkus-consumer")
     public void addItem(JsonObject jsonItem) {
         Item item = jsonItem.mapTo(Item.class);
+        LOG.info("New item: " + item.toString());
         itemService.addItem(item);
     }
 
     public String spamItem(Integer count) {
+        LOG.info("Item spam activated");
         Item item = new Item();
         item.setName("Spam item");
         item.setDescription("Item for spam");

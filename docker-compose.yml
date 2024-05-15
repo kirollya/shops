@@ -1,0 +1,114 @@
+version: "3.9"
+services:
+  elasticsearch:
+    image: elastic/elasticsearch:8.13.4
+    container_name: elasticsearch
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+      discovery.type: single-node
+      cluster.routing.allocation.disk.threshold_enabled: false
+      xpack.security.enabled: false
+    networks:
+      - bridgenet
+      - elk
+  logstash:
+    image: docker.io/elastic/logstash:8.13.4
+    container_name: logstash
+    volumes:
+      - source: /home/quarkusdb/pipelines
+        target: /usr/share/logstash/pipeline
+        type: bind
+    ports:
+      - "12201:12201/udp"
+      - "5000:5000"
+      - "9600:9600"
+    environment:
+      xpack.monitoring.enabled: true
+    networks:
+      - elk
+      - bridgenet
+    depends_on:
+      - elasticsearch
+  kibana:
+    image: docker.io/elastic/kibana:8.13.4
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+  
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+    networks: 
+      - bridgenet
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - grafana-configs:/etc/grafana
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    depends_on:
+      - shops-service
+    restart: unless-stopped 
+    networks: 
+      - bridgenet 
+    volumes:
+      - prom-data:/prometheus
+      - prom-configs:/etc/prometheus
+
+  postgres:
+    image: postgres
+    container_name: mypostgres
+    environment:
+      - 'POSTGRES_PASSWORD=postgres'
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./shopsDbData:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks: 
+      - bridgenet
+  rabbit:
+    image: rabbitmq
+    container_name: myrabbitmq
+    ports:
+      - "5672:5672"
+    restart: unless-stopped
+    networks: 
+      - bridgenet
+  shops-service:
+    image: shops
+    container_name: shops-service
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      - rabbit
+    networks: 
+      - bridgenet
+    
+volumes:
+  grafana-data:
+  grafana-configs:
+  prom-data:
+  prom-configs:
+networks:
+  bridgenet:
+    driver: bridge
+    name: bridgenet
+  elk:
+    driver: bridge
+    name: elk
