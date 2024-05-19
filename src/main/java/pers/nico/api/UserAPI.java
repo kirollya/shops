@@ -11,6 +11,8 @@ import pers.nico.models.entities.Sell;
 import pers.nico.models.entities.Shop;
 import pers.nico.reports.ReportBuilder;
 
+import java.net.InetAddress;
+
 @Path("")
 //@RolesAllowed("user")
 @PermitAll
@@ -18,6 +20,19 @@ public class UserAPI {
 
     @Inject
     MainFacade mainFacade;
+
+    @GET
+    @Path("/hello")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String greeting() {
+        String localhost = "localhost";
+        try {
+            localhost = InetAddress.getLocalHost().getHostAddress();
+        } catch(Exception e) {
+            System.out.println("Unable to get local IP address");
+        }
+        return "I'm host " + localhost;
+    }
 
     @POST
     @Path("/addItem")

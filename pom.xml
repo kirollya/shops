@@ -89,6 +89,14 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-smallrye-reactive-messaging-rabbitmq</artifactId>
     </dependency>
+    <dependency>
+      <groupId>io.smallrye.reactive</groupId>
+      <artifactId>smallrye-mutiny-vertx-consul-client</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.smallrye.stork</groupId>
+      <artifactId>stork-service-discovery-consul</artifactId>
+    </dependency>
   </dependencies>
   <build>
     <plugins>

@@ -1,12 +1,19 @@
 package pers.nico;
 
+import io.quarkus.runtime.StartupEvent;
 import io.smallrye.reactive.messaging.annotations.Blocking;
 import io.vertx.core.json.JsonObject;
+import io.vertx.ext.consul.ConsulClientOptions;
+import io.vertx.ext.consul.ServiceOptions;
+import io.vertx.mutiny.core.Vertx;
+import io.vertx.mutiny.ext.consul.ConsulClient;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Observes;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.jboss.logging.Logger;
 import pers.nico.metrics.ObjectCounterMetric;
@@ -19,6 +26,7 @@ import pers.nico.services.ItemService;
 import pers.nico.services.SellService;
 import pers.nico.services.ShopService;
 
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,6 +54,9 @@ public class MainFacade {
     @Inject
     SellService sellService;
 
+    @ConfigProperty(name = "consul.host") String host;
+    @ConfigProperty(name = "consul.port") int port;
+
     private static final Logger LOG = Logger.getLogger(MainFacade.class);
 
     public String addItem(Item item) {
@@ -61,6 +72,7 @@ public class MainFacade {
         Item item = jsonItem.mapTo(Item.class);
         LOG.info("New item: " + item.toString());
         itemService.addItem(item);
+        objectCounterMetric.putObj();
     }
 
     public String spamItem(Integer count) {
@@ -71,7 +83,7 @@ public class MainFacade {
         for (int i = 0; i < count; i++) {
             rabbitSpamer.send(item);
         }
-        objectCounterMetric.putObj(count);
+        //objectCounterMetric.putObj(count);
         return "Fine";
     }
 
@@ -170,6 +182,20 @@ public class MainFacade {
 
     public List<Sell> getAllSell() {
         return sellService.getSellRepository().listAll();
+    }
+
+    public void init(@Observes StartupEvent startupEvent, Vertx vertx) {
+        ConsulClient consulClient = ConsulClient.create(vertx, new ConsulClientOptions().setHost(host).setPort(port));
+        String localhost = "localhost";
+        try {
+            localhost = InetAddress.getLocalHost().getHostAddress();
+        } catch(Exception e) {
+            System.out.println("Unable to get local IP address");
+        }
+        consulClient.registerServiceAndAwait(
+                new ServiceOptions().setPort(8080).setAddress(localhost).setName("shops-service")
+                        .setId("host: " + localhost)
+        );
     }
 
 }
